@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <string>
+#include <fstream>
 #include "Dish.h"
 #include "Table.h"
 #include "Action.h"
@@ -24,5 +25,21 @@ private:
     std::vector<Dish> menu;
     std::vector<BaseAction*> actionsLog;
 };
+Restaurant::Restaurant(const std::string &configFilePath){
+    std::string line;
+    std::ifstream myfile (configFilePath.c_str());
 
+    if(myfile.is_open()){
+        while(getline(myfile,line)){
+            // std::cout<< line <<'\n';
+        }
+        myfile.close();
+    }
+    else std::cout <<"Unable to open file";
+
+}
+
+void Restaurant::start(){
+    std::cout<<"Restaurant is open \n";
+}
 #endif
