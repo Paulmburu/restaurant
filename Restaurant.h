@@ -13,9 +13,9 @@
 
 class Restaurant{		
 public:
-	Restaurant();
-    Restaurant(const std::string &configFilePath);
-    void start();
+	Restaurant();  // done
+    Restaurant(const std::string &configFilePath);  //done
+    void start();   // done
     int getNumOfTables() const;
     Table* getTable(int ind);
 	const std::vector<BaseAction*>& getActionsLog() const; // Return a reference to the history of actions
@@ -30,15 +30,47 @@ private:
 Restaurant::Restaurant(const std::string &configFilePath){
     std::string line;
     std::ifstream myfile (configFilePath.c_str());
+    std::vector<std::string> details;
 
+    int noOfTables=0;
+
+    //open the config file
     if(myfile.is_open()){
         while(getline(myfile,line)){
             // std::cout<< line <<'\n';
+            details.push_back(line);
         }
         myfile.close();
     }
     else std::cout <<"Unable to open file";
 
+    for(int i=0;i!=details.size();++i){
+        // store number of tables
+        if(details.at(i).compare("#number of tables")==0)
+                noOfTables=std::stoi(details.at(i+1)); //ignore
+
+        // store table description    
+        if(details.at(i).compare("#tables description")==0){
+                // ie 6,4,4,14,10,10
+                std::string nosDescription=details.at(i+1);
+                
+
+                if(noOfTables<2)
+                    std::cout<<"one table\n";
+                if(noOfTables>=2){
+                    std::stringstream ss(nosDescription);
+                    while(ss.good()){
+                        std::string number;
+                        getline(ss,number,',');
+                        // std::cout<<number<<" "<<std::endl; 
+                        tables.push_back(new Table(std::stoi(number)));
+                    }
+                }
+        }
+
+        
+    }
+    std::cout<<"Tables are "<<noOfTables<<std::endl;
 }
 
 void Restaurant::start(){
